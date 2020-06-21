@@ -18,7 +18,7 @@ def main():
 
     # read training data
     print(datetime.datetime.now())
-    all_training = read_csv("./data/small.csv")[1:]
+    all_training = read_csv("./data/train.csv")[1:]
 
     data_len = len(all_training)
     val_num = int(split_ratio * data_len)
@@ -32,7 +32,7 @@ def main():
         confusion_matrix = np.tile(np.zeros(10), (10, 1))
 
         indexes = np.array(range(data_len))
-        # random.Random(fold).shuffle(indexes)
+        random.Random(fold).shuffle(indexes)
 
         neighbors = [all_training[train] for train in indexes[:train_num]]
         validation = [all_training[valid] for valid in indexes[train_num:]]
@@ -43,7 +43,7 @@ def main():
         subjects = np.array([item[1:] for item in validation])
 
         predictions = nearest_neighbors_search(
-            subjects, neighbors, val_num, train_num, K=5)
+            subjects, neighbors, val_num, train_num, K=10)
 
         for i, item in enumerate(predictions):
             confusion_matrix[val_digits[i]][item] += 1
